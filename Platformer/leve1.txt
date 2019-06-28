@@ -1,0 +1,110 @@
+ 
+import Felgo 3.0
+import QtQuick 2.0
+import "../entities"
+import "." as Levels
+
+Levels.LevelBase {
+    id: level
+    // we need to specify the width to get correct debug draw for our physics
+    // the PhysicsWorld component fills it's parent by default, which is the viewPort Item of the gameScene and this item uses the size of the level
+    // NOTE: thy physics will also work without defining the width here, so no worries, you can ignore it untill you want to do some physics debugging
+    width: 42 * gameScene.gridSize // 42 because our last tile is a size 30 Ground at row 12
+
+    // you could draw your level on a graph paper and then add the tiles here only by defining their row, column and size
+    Ground {
+        row: 0
+        column: 0
+        size: 15
+    }
+
+    Ground{
+        row: 0
+        column: 1
+        size: 15
+    }
+
+    Ground{
+        row: 0
+        column: 2
+        size: 15
+    }
+
+    Ground{
+        row:0
+        column: 3
+        size: 15
+    }
+
+    Ground{
+        row:0
+        column: 4
+        size: 15
+    }
+
+    Ground{
+        row: 0
+        column: 5
+        size: 15
+    }
+
+    Ground{
+        row:0
+        column: 6
+        size: 15
+    }
+
+    Ground{
+        row:0
+        column: 7
+        size: 15
+    }
+
+    GroundFace{
+        row:0
+        column: 8
+        size:10
+    }
+
+    GroundFace{
+        row: 9
+        column: 8
+        size: 40
+    }
+
+
+    Snowball{
+        row : 14
+        column: 9
+        size:1
+    }
+
+    Snowball{
+        row : 4
+        column: 9
+        size:1
+    }
+
+    EnemySnowman{
+        row : 19
+        column: 9
+        size:1
+    }
+
+    //金币
+      Repeater{
+          model: 6
+          Coin{
+              row: 5+index
+              column: 14
+              size: 1
+          }
+      }
+
+
+    Platform{
+        row: 18
+        column: 11
+        size:6
+    }
+}
