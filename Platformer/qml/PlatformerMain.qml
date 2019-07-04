@@ -1,27 +1,83 @@
+/*
+ *Project name:Runing Man
+ *Autor:Xianghang  Zhoujianjun Lzefeng
+ *Time:201906024
+ *
+ */
 import Felgo 3.0
 import QtQuick 2.0
-
+import "scene"
+import "common"
+import "dialog"
 GameWindow {
   id: gameWindow
 
-  // You get free licenseKeys from https://felgo.com/licenseKey
-  // With a licenseKey you can:
-  //  * Publish your games & apps for the app stores
-  //  * Remove the Felgo Splash Screen or set a custom one (available with the Pro Licenses)
-  //  * Add plugins to monetize, analyze & improve your apps (available with the Pro Licenses)
-  //licenseKey: "<generate one from https://felgo.com/licenseKey>"
-
-  activeScene: gameScene
-
-  // the size of the Window can be changed at runtime by pressing Ctrl (or Cmd on Mac) + the number keys 1-8
-  // the content of the logical scene size (480x320 for landscape mode by default) gets scaled to the window size based on the scaleMode
-  // you can set this size to any resolution you would like your project to start with, most of the times the one of your main target device
-  // this resolution is for iPhone 4 & iPhone 4S
   screenWidth: 960
   screenHeight: 640
-
-  GameScene {
-    id: gameScene
+  FontLoader{
+      id:gameFont
+      source: "../assets/KGSecondChancesSketch.ttf"
   }
+  FontLoader{
+      id:gameFont1
+      source: "../assets/KGSecondChancesSolid.ttf"
+  }
+
+  MenuScene {
+    id: menuScene
+  }
+  GameScene{
+     id:gameScene1
+  }
+  SelectScene{
+      id:selectscene
+  }
+//  Dialog{
+//      id:finishadialog
+//  }
+
+  property alias dialog: dialog
+  Finishdialog{
+      id: dialog
+  }
+
+  BaseMusic{
+      id:music
+  }
+
+  state: "menu"
+
+   //this state machine handles the transition between scenes
+  states: [
+    State {
+      name: "menu"
+      PropertyChanges {target: menuScene; opacity: 1}
+      PropertyChanges {target: gameWindow; activeScene: menuScene}
+      StateChangeScript {script: music.selectMusics()}
+    },
+      State {
+        name: "level"
+        PropertyChanges {target: selectscene; opacity: 1}
+        PropertyChanges {target: gameWindow; activeScene: selectscene}
+        StateChangeScript {script: music.selectMusics()}
+      },
+    State {
+      name: "game1"
+      PropertyChanges {target: gameScene1; opacity: 1}
+      PropertyChanges {target: gameWindow; activeScene: gameScene1}
+      StateChangeScript {script: music.selectMusics()}
+      StateChangeScript{script: GameScene.resetLevel()}
+    },
+    State {
+          name: "finish"
+          PropertyChanges {target: physicsWorld ; running: false} // disable physics
+          PropertyChanges{target: dialog; opacity:1 }
+      }
+//      State {
+//        name: "game2"
+//        PropertyChanges {target: gameScene2; opacity: 1}
+//        PropertyChanges {target: gameWindow; activeScene: gameScene2}
+//      }
+  ]
 }
 

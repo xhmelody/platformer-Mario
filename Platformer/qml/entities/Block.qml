@@ -16,7 +16,7 @@ TiledEntityBase {
     Tile{
         //这里实现动态效果  循环贴图
         //这里可以切换   当玩家顶一次后   换一张图片
-        image.source: "../../assets/ground/mid.png"
+        image.source:!hadHit? "../../assets/platform/orange.png":"../../assets/platform/orange-empty.png"
         id: oneBlock
         width: gameScene.gridSize
         height: gameScene.gridSize
@@ -88,7 +88,7 @@ TiledEntityBase {
         anchors.bottom: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
         width: parent.width-4
-        height: 0.2
+        height: 2
         bodyType: Body.Static
         categories: Box.Category9
         collidesWith: Box.Category1
@@ -113,12 +113,8 @@ TiledEntityBase {
         width: parent.width
         height: parent.height
         anchors.bottom: parent.top
-        source: "../../assets/snowball/snowball.png"
+        source: "../../assets/platform/getbigger.png"
         visible: !collected && hadHit
-    }
-    function reset() {
-        block.collected = false
-        block.hadHit = false
     }
 
 }

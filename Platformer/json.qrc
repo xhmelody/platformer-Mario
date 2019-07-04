@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/data">
-        <file>save.json</file>
-    </qresource>
-</RCC>

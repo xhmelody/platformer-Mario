@@ -9,8 +9,7 @@ DEPLOYMENTFOLDERS += assetsFolder
 
 # Add more folders to ship with the application here
 
-RESOURCES += \ #    resources.qrc # uncomment for publishing
-    json.qrc
+RESOURCES += #    resources.qrc # uncomment for publishing
 
 # NOTE: for PUBLISHING, perform the following steps:
 # 1. comment the DEPLOYMENTFOLDERS += qmlFolder line above, to avoid shipping your qml files with the application (instead they get compiled to the app binary)
@@ -24,10 +23,6 @@ RESOURCES += \ #    resources.qrc # uncomment for publishing
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
-#    main.cpp \
-#    main.cpp \
-#    main.cpp
-    loadfile.cpp
 
 android {
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
@@ -48,9 +43,20 @@ DISTFILES += \
     assets/snowMan/headless5.png \
     assets/snowMan/headless6.png \
     assets/snowMan/headless7.png \
-    assets/snowMan/headless8.png
-
-HEADERS += \
-    loadfile.h \
-    loadfile.h
+    assets/snowMan/headless8.png \
+    assets/ground/iced-left.png \
+    assets/crytallo/crystallo-left-1.png \
+    assets/crytallo/crystallo-left-0.png \
+    assets/crytallo/crystallo-left-2.png \
+    assets/crytallo/shattered-left.png \
+    qml/entities/EnemyCrystallo.qml \
+    assets/platform/orange_empty.png \
+    assets/platform/orange_2.png \
+    assets/platform/getbigger.png \
+    KGSecondChancesSolid.ttf \
+    KGSecondChancesSketch.ttf \
+    qml/entities/Finish.qml \
+    assets/finish/exitbg.png \
+    assets/finish/exitfg.png \
+    KGFonts-TOU.txt
 

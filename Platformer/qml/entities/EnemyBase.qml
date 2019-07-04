@@ -9,7 +9,6 @@ TiledEntityBase {
   property int startY
 
   property int pictureNum: 1
-  property int theShapeOfEnemy: 1 //这里的数字可以用来更改图片  加载不同的图片
 
   //怪物是否活着
   property bool alive: true
@@ -21,10 +20,11 @@ TiledEntityBase {
   onEntityCreated: updateStartPosition()
   onEntityReleased: updateStartPosition()
 
-  // 怪物被踩死后，两秒才隐藏
+  // this timer hides the opponent a few seconds after its death
   Timer {
     id: hideTimer
     interval: 2000
+
     onTriggered: hidden = true
   }
   //用一个计时器   来处理怪物的移动的   循环贴图
@@ -51,10 +51,13 @@ TiledEntityBase {
   {
     //所有怪物都变活
     alive = true
-    // 停止计时器
+
+
+    // stop hideTimer, to avoid unwanted, delayed hiding of the opponent
     hideTimer.stop()
     // 取消隐藏
     hidden = false
+
     // 重置坐标
     x = startX
     y = startY
@@ -65,6 +68,19 @@ TiledEntityBase {
 
     // 重置力
     collider.force = Qt.point(0, 0)
+  }
+  //无敌效果改变碰撞区域
+  function setCollidesWith(){
+      collider.collidesWith = Box.Category2 | Box.Category7
+      invincibleTime.start()
+  }
+  //无敌效果延迟时间
+  Timer{
+      id : invincibleTime
+      interval: 1000
+      onTriggered: {
+          collider.collidesWith = Box.Category1 | Box.Category2 | Box.Category7
+      }
   }
 
   function die() {

@@ -1,10 +1,11 @@
 import QtQuick 2.0
 import Felgo 3.0
+import "../scene"
 
 TiledEntityBase{
     id : coin
     entityType: "coin"
-
+    property  int coins: 0
     property bool collected: false
     Tile{
 
@@ -29,11 +30,13 @@ TiledEntityBase{
         categories: Box.Category6
         // Category1: 玩家
         collidesWith: Box.Category1
+
     }
 
     // set collected to true
     function collect() {
         console.debug("collect coin")
+        coin.coins++
         coin.collected = true
     }
 
@@ -42,9 +45,6 @@ TiledEntityBase{
         coin.collected = false
     }
 }
-
-
-
 
 
 //import QtQuick 2.0

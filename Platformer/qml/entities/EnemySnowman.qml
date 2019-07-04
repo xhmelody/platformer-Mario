@@ -13,16 +13,24 @@ EnemyBase{
         id : enemy
         property alias enemy : enemy
         image.visible: !hidden
-        image.source: alive ? "../../assets/snowMan/headless"+pictureNum%8+".png"
-                            : "../../assets/snowMan/headless8.png"
+        image.source: alive ? "../../assets/iceblock/left-"+pictureNum%3+".png"
+                            : "../../assets/iceblock/waking-left-0.png"
         image.mirror: collider.linearVelocity.x > 0 ? true : false
     }
 
+    onAliveChanged: {
+      if(!alive) {
+        leftAbyssChecker.contacts = 0
+        rightAbyssChecker.contacts = 0
+      }
+    }
 
+    // main collider
     BoxCollider {
       id: collider
       bodyType: Body.Dynamic
 
+      // when dead
       //我那里只需要当dead的时候   为false
       active: !alive ? false : true
 
@@ -48,13 +56,15 @@ EnemyBase{
     //边缘检测器
     BoxCollider {
       id: leftAbyssChecker
-      //和怪物一起
+
+      // only active, when the main collider is active
       active: collider.active
 
-      // 让他尽量很小
+      // we make it rather small
       width: 5
       height: 5
 
+      // place it left, below the opponent
       anchors.top: parent.bottom
       anchors.left: parent.left
 
@@ -71,7 +81,8 @@ EnemyBase{
       //处理
       fixture.onBeginContact: contacts++
       fixture.onEndContact: if(contacts > 0) contacts--
-      // 改变方向   当这块碰撞区域和地面的碰撞区域离开接触
+
+      // 改变方向
       onContactsChanged: if(contacts == 0) direction *= -1
     }
 
@@ -80,16 +91,20 @@ EnemyBase{
 
       active: collider.active
 
+      // size and position
       width: 5
       height: 5
       anchors.top: parent.bottom
       anchors.right: parent.right
 
+      // Category4: opponent sensor
       categories: Box.Category4
-      // Category2: 地面
+      // Category5: solids
       collidesWith: Box.Category2
 
       collisionTestingOnlyMode: true
+
+      // handle contacts
       property int contacts: 0
 
       fixture.onBeginContact: contacts++
@@ -98,24 +113,29 @@ EnemyBase{
       onContactsChanged: if(contacts == 0) direction *= -1
     }
 
-    //无敌效果改变碰撞区域
-    function setCollidesWith(){
-        collider.collidesWith = Box.Category2 | Box.Category7
-        invincibleTime.start()
-    }
-    //无敌效果延迟时间
-    Timer{
-        id : invincibleTime
-        interval: 1000
-        onTriggered: {
-            collider.collidesWith = Box.Category1 | Box.Category2 | Box.Category7
-        }
-    }
+//    //无敌效果改变碰撞区域
+//    function setCollidesWith(){
+//        collider.collidesWith = Box.Category2 | Box.Category7
+//        invincibleTime.start()
+//    }
+//    //无敌效果延迟时间
+//    Timer{
+//        id : invincibleTime
+//        interval: 1000
+//        onTriggered: {
+//            collider.collidesWith = Box.Category1 | Box.Category2 | Box.Category7
+//        }
+//    }
 
+    // reset the opponent
     function reset() {
-     //base里的重置
+      // this is the reset function of the base entity Opponent.qml
       reset_super()
+
+      // reset direction
       direction = -1
+
+      // reset force
       collider.linearVelocity.x = Qt.point(direction * speed, 0)
     }
 

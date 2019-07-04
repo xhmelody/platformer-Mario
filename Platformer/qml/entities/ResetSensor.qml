@@ -20,7 +20,9 @@ EntityBase {
     fixture.onBeginContact: {
       var otherEntity = other.getBody().target
       if(otherEntity.entityType === "player") {
-        resetSensor.contact()
+
+
+        gameScene.resetLevel()
       }
     }
   }

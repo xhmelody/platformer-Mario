@@ -32,7 +32,7 @@ TiledEntityBase {
         anchors.bottom: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
         width: parent.width-4
-        height: 0.2
+        height: 2
         bodyType: Body.Static
         categories: Box.Category9
         collidesWith: Box.Category1

@@ -4,425 +4,177 @@ import "../entities"
 import "." as Levels
 
 Levels.LevelBase {
-    id: level
-    width: 42 * gameScene.gridSize // 42 because our last tile is a size 30 Ground at row 12
+  id: level
+
+  width: 42 * gameScene.gridSize
+
+
+
+  EnemySnowmanjump{
+      row:14
+      column: 9
+      size: 1
+      //changeDirection:true
+  }
+  Block{
+      row:12
+      column: 12
+      size: 1
+  }
 
 
 
 
-    visible: true
 
-    //接收json数据
-    property var json_load: JSON.parse(jsondata.load)
 
-    //这种处理就得已知所有的数据
-    Coin
-    {
-        id:coin_0
-        row: json_load.levels[0].Coin[0].row
-        column: json_load.levels[0].Coin[0].column
-        size: json_load.levels[0].Coin[0].size
-        collected:json_load.levels[0].Coin[0].collected  //字符串"false"和false
-    }
-    Coin{
-        id:coin_1
-        row: json_load.levels[0].Coin[1].row
-        column: json_load.levels[0].Coin[1].column
-        size: json_load.levels[0].Coin[1].size
-        collected:json_load.levels[0].Coin[1].collected  //字符串"false"和false
-    }
-    //JSON文件一层一层的来
-    EnemyDevil{
-        id:enemyDevil_0
-        row: json_load.levels[0].npcs[0].row
-        column: json_load.levels[0].npcs[0].column
-        size:json_load.levels[0].npcs[0].size
-        changeDirection: json_load.levels[0].npcs[0].changeDirection
-        onlyJumpUpward: true
-    }
+  EnemySnowman{
+      row : 19
+      column: 9
+      size:1
+  }
 
-    EnemyDevil{ //直接创建的
-        id:enemyDevil_1
-        row: 37
-        column: 10
-        size:1
-        changeDirection: true
-        onlyJumpUpward: false
-    }
-    EnemyDevil{  //直接创建的
-        id:enemyDevil_2
-        row: 14
-        column: 9
-        size:1
-        changeDirection: false
-        onlyJumpUpward: false
-    }
-    EnemyDevil{  //直接创建的
-        id:enemyDevil_3
-        row: 12
-        column: 9
-        size:1
-        changeDirection: true
-        onlyJumpUpward: false
-    }
-
-//    Block{//直接创建的
-//        id:block_1
-//        row : 13
-//        column: 9
-//        size:1
-//    }
-
-    Block{
-        id:block_0
-        row : json_load.levels[0].Block.row
-        column: json_load.levels[0].Block.column
-        size:json_load.levels[0].Block.size
-    }
-
-    Platform{
-        id:platform_0
-        row : json_load.levels[0].Platform.row
-        column: json_load.levels[0].Platform.column
-        size:json_load.levels[0].Platform.size
-    }
-
-    EnemySnowman{
-        id:enemySnowMan_0
-        row : json_load.levels[0].npcs[1].row
-        column: json_load.levels[0].npcs[1].column
-        size:json_load.levels[0].npcs[1].size
-    }
-
-    //    //金币
-    //      Repeater{
-    //          model: 7
-    //          Coin{
-    //              row: json_load.levels[0].Coin[index].row
-    //              column: json_load.levels[0].Coin[index].column
-    //              size: json_load.levels[0].Coin[index].size
-    //              collected:json_load.levels[0].Coin[index].collected  //字符串"false"和false
-    //          }
-    //      }
-
-    //场景重置函数    //这里每一个对象都是一个实体   所以这里麻烦  但也没有办法   可以用数组
-    function reset(){
-        coin_0.reset();
-        coin_1.reset();
-        enemyDevil_0.reset();
-        enemyDevil_1.reset();
-        enemyDevil_2.reset();
-        enemySnowMan_0.reset();
-        block_0.reset();
-    }
-
-    function getLevel(){
-        var tempLevel = {
-            "levels":[
-                {
-                    "name":"Village",
-                    "Coin":[
-                        {
-                            "row":coin_0.row,
-                            "column":coin_0.column,
-                            "size":coin_0.size,
-                            "collected":coin_0.collected,
-                            "name":"coin_0"
-                        },
-                        {
-                            "row":coin_1.row,
-                            "column":coin_1.column,
-                            "size":coin_1.size,
-                            "collected":coin_1.collected,
-                            "name":"coin_1"
-                        }
-                    ],
-                    "npcs":[
-                        {
-                            "row":enemyDevil_0.row,
-                            "column":enemyDevil_0.column,
-                            "size":enemyDevil_0.size,
-                            "changeDirection":enemyDevil_0.changeDirection,
-                            "name":"enemyDevil_0"
-                        },
-                        {
-                            "row":enemySnowMan_0.row,
-                            "column":enemySnowMan_0.column,
-                            "size":enemySnowMan_0.size,
-                            "name":"enemySnowMan_0"
-                        }
-                    ],
-                    "Block":{
-                        "row":block_0.row,
-                        "column":block_0.column,
-                        "size":block_0.size,
-                        "name":"block_0"
-                    },
-                    "Platform":{
-                        "row":platform_0.row,
-                        "column":platform_0.column,
-                        "size":platform_0.size,
-                        "name":"platform_0"
-                    }
-                }
-            ],
-            "Player":{
-                "name":"superMan",
-                "x":player.x,
-                "y":player.y
-            }
+  //金币
+    Repeater{
+        model: 6
+        Coin{
+            row: 5+index*2
+            column: 14
+            size: 1
         }
-        jsondata.jsonData = tempLevel;
+    }
+
+  Ground {
+    row: 0
+    column: 0
+    size: 23
+  }
+    Ground{
+      row: 0
+      column: 1
+      size: 23
     }
 
 
-      Component.onCompleted: {
-          getLevel();
-      }
 
 
-
-
-    //  //生成json对象
-    //  function getData(){
-
-    //          var getCoin = {
-    //              row:22,
-    //              colunm:12,
-    //              size:1
-    //          }
-
-    //      var getCoin = [
-    //                  {
-    //                      row:22,
-    //                      column:13,
-    //                      size:1,
-    //                      collected:true
-    //                  },
-    //                  {
-    //                      row:23,
-    //                      column:13,
-    //                      size:1,
-    //                      collected:true
-    //                  },
-    //                  {
-    //                      row:24,
-    //                      column:13,
-    //                      size:1,
-    //                      collected:true
-    //                  },
-    //                  {
-    //                      row:25,
-    //                      column:13,
-    //                      size:1,
-    //                      collected:true
-    //                  }
-
-    //      ]
-    //      if (getCoin.isArray())
-    //      {
-
-    //      }
-    //      jsondata.jsonData = getCoin;
-    //  }
-
-
-    //  Rectangle{
-    //      width: 200
-    //      height: 200
-    //      color: "red"
-    //      Text
-    //      {
-    //          id: n
-    //          text: json_load.Points[0].x
-    //      }
-    //  }
-
-    //    Rectangle{
-    //        width: 200
-    //        height: 200
-    //        color: "red"
-    //        Text
-    //        {
-    //            id: n
-    //            text: json_load.player.name     //player和level是同一级的
-    //        }
-    //    }
-
-    //      Rectangle{
-    //          width: 200
-    //          height: 200
-    //          color: "red"
-    //          Text
-    //          {
-    //              id: n
-    //              text: json_load.levels.Coin[0].row     //player和level是同一级的
-    //          }
-    //      }
-
-    //        Rectangle{
-    //            width: 200
-    //            height: 200
-    //            color: "red"
-    //            Text
-    //            {
-    //                id: n
-    //                text: json_load.levels[0].Coin[0].collected     //player和level是同一级的
-    //            }
-    //        }
-
-
-
-
-    //  //金币
-    //    Repeater{
-    //        property int number: 0
-    //        model: 7
-    //        Coin{
-    ////            row: json_load.levels[0].Coin[index].row
-    ////            column: json_load.levels[0].Coin[index].column
-    ////            size: json_load.levels[0].Coin[index].size
-
-    //            row: json_load.levels[0].Coin[index].row
-    //            column:14
-    //            size:1
-    //        }
-    //    }
-    //    //金币
-    //      Repeater{
-    //          model: 6
-    //          Coin{
-    //              row: 5+index
-    //              column: 14
-    //              size: 1
-    //          }
-    //      }
-
-
-
-    Ground {
-        row: 0
-        column: 0
-        size: 23
+    Ground{
+      row: 0
+      column: 2
+      size: 23
     }
     Ground{
-        row: 0
-        column: 1
-        size: 23
+      row:0
+      column: 3
+      size: 23
     }
     Ground{
-        row: 0
-        column: 2
-        size: 23
+      row:0
+      column: 4
+      size: 23
     }
     Ground{
-        row:0
-        column: 3
-        size: 23
+      row: 0
+      column: 5
+      size: 19
     }
     Ground{
-        row:0
-        column: 4
-        size: 23
+      row:0
+      column: 6
+      size: 19
     }
     Ground{
-        row: 0
+      row:0
+      column: 7
+      size: 15
+    }
+    GroundFace{
+      row:0
+      column: 8
+      size:15
+    }
+    GroundFace{
+      row:15
+      column: 7
+      size:4
+    }
+    GroundFace{
+    row:19
+    column: 4
+    size:4
+    }
+    EnemyCrystallo{
+        row:19
         column: 5
-        size: 19
-    }
-    Ground{
-        row:0
-        column: 6
-        size: 19
-    }
-    Ground{
-        row:0
-        column: 7
-        size: 15
-    }
-    GroundFace{
-        row:0
-        column: 8
-        size:15
-    }
-    GroundFace{
-        row:15
-        column: 7
-        size:4
+        size: 1
     }
 
-    Coin{
-        row:15
-        column:10
-        size:1
-    }
-    Coin{
-        row:16
-        column:10
-        size:1
-    }
-    Coin{
-        row:17
-        column:10
-        size:1
-    }
-    Coin{
-        row:18
-        column:10
-        size:1
-    }
-
-//    GroundFace{
-//        row:19
+//    Snowball{
+//        row:22
 //        column: 5
-//        size:4
+//        size: 1
 //    }
 
 
+    EnemyBighead{
+    row:25
+    column: 10
+    size: 1
+    }
 
-//    GroundFace{
-//        row:25
-//        column:7
-//        size:3
-//    }
+    GroundFace{
+       row:25
+       column:9
+       size:4
+   }
 
+  EnemyHedgehog{
+      row:25
+      column: 8
+      size: 1
+  }
 
-
     Ground{
-        row:30
-        column: 0
-        size:13
-    }
+       row:30
+       column: 0
+       size:13
+   }
     Ground{
-        row:30
-        column: 1
-        size:13
-    }
+       row:30
+       column: 1
+       size:13
+   }
     Ground{
-        row:30
-        column: 2
-        size:13
-    }
+       row:30
+       column: 2
+       size:13
+   }
     Ground{
-        row:30
-        column: 3
-        size:13
-    }
+       row:30
+       column: 3
+       size:13
+   }
     Ground{
-        row:30
-        column: 4
-        size:13
-    }
+       row:30
+       column: 4
+       size:13
+   }
     Ground{
-        row:30
-        column: 5
-        size:5
-    }
+       row:30
+       column: 5
+       size:5
+   }
     GroundFace{
         row:30
         column: 6
         size:5
     }
+    EnemySnowmanjump{
+        row:32
+        column: 7
+        size: 1
+        changeDirection: true
+    }
+
     GroundFace{
         row:35
         column: 4
@@ -444,22 +196,27 @@ Levels.LevelBase {
         column:7
         size:4
     }
+    EnemyBighead{
+        row:42
+        column: 7
+        size:1
+    }
 
 
     Ground{
         row:45
         column: 0
-        size:17
+        size:18
     }
     Ground{
         row:45
         column: 1
-        size:17
+        size:18
     }
     Ground{
         row:45
         column: 2
-        size:17
+        size:18
     }
     Ground{
         row:45
@@ -489,37 +246,85 @@ Levels.LevelBase {
     GroundFace{
         row:48
         column:3
-        size:10
+        size:11
     }
-    GroundFace{
-        row:51
-        column:6
-        size:4
+    Repeater{
+       model:3
+        Coin{
+      row:48+index
+      column: 11+index*2
+      size:1
     }
+    }
+    Repeater{
+      model:3
+        Coin{
+            row:51+index
+            column:15
+            size: 1
+        }
+}
+Repeater
+{
+    model: 3
+    Coin{
+        row:54+index*2
+        column: 15-index*2
+        size: 1
+    }
+}
+
+
+    Enemyironhead{
+        row:49
+        column: 4
+        size: 1
+        verticalJumpForce: 350
+       //changeverticalJumpForce()
+    }
+
+    Enemyironhead{
+        row:53
+        column: 4
+        size:1
+    }
+    Enemyironhead {
+        row:57
+        column: 4
+        size: 1
+        verticalJumpForce: 350
+    }
+
+
     Ground{
-        row:58
+        row:59
         column:3
         size:4
     }
     Ground{
-        row:58
+        row:59
         column:4
         size:4
     }
     Ground{
-        row:58
+        row:59
         column:5
         size:4
     }
     Ground{
-        row:58
+        row:59
         column:6
         size:4
     }
     GroundFace{
-        row:58
+        row:59
         column:7
         size:4
+    }
+    GroundFace{
+        row:59
+        column: 14
+        size:3
     }
 
     GroundFace{
@@ -527,11 +332,7 @@ Levels.LevelBase {
         column: 10
         size:3
     }
-    GroundFace{
-        row:59
-        column: 13
-        size:3
-    }
+
 
     Ground{
         row:67
@@ -603,12 +404,21 @@ Levels.LevelBase {
         column: 13
         size:5
     }
-    GroundFace{
+    Ground{
         row:67
         column: 14
         size:5
     }
-
+    GroundFace{
+        row:67
+        column: 15
+        size:5
+    }
+    Snowball{
+        row:70
+        column: 16
+        size: 1
+    }
 
 
     GroundFace{
@@ -672,13 +482,39 @@ Levels.LevelBase {
         column:9
         size:10
     }
+    EnemyHedgehog{
+        row:88
+        column: 11
+        size: 1
+    }
+Coin{
+    row:87
+    column: 11
+    size: 1
+}
+
     GroundFace{
         row:87
         column:10
         size:10
     }
 
-
+Repeater{
+    model:5
+    Coin{
+         row:101
+         column:10+index
+         size: 1
+          }
+}
+Repeater{
+    model:5
+    Coin{
+         row:102
+         column:10+index
+         size: 1
+          }
+}
     GroundFace{
         row:101
         column:9
@@ -693,9 +529,15 @@ Levels.LevelBase {
     }
     GroundFace{
         row:110
-        column:7
+        column:6
         size:5
     }
+    Enemyironhead{
+        row:112
+        column: 7
+        size:1
+    }
+
     GroundFace{
         row:115
         column: 8
@@ -752,7 +594,11 @@ Levels.LevelBase {
         size:3
     }
 
-
+Coin{
+    row:121
+    column: 7
+    size: 1
+}
 
     GroundFace{
         row:121
@@ -797,10 +643,22 @@ Levels.LevelBase {
         size:4
     }
     GroundFace{
-        row:113
+        row:114
         column: 13
-        size:4
+        size:5
+
     }
+    Coin{
+        row:127
+        column: 17
+        size: 1
+    }
+    Block{
+        row:116
+        column: 17
+        size:1
+    }
+
     GroundFace{
         row:121
         column:16
@@ -853,7 +711,11 @@ Levels.LevelBase {
         column: 4
         size:3
     }
-
+    Coin{
+        row:133
+        column: 7
+        size: 1
+    }
     GroundFace{
         row:133
         column: 6
@@ -924,7 +786,11 @@ Levels.LevelBase {
     }
 
 
-
+    Coin{
+        row:147
+        column: 8
+        size: 1
+    }
     GroundFace{
         row:147
         column:8
@@ -1011,20 +877,48 @@ Levels.LevelBase {
         column:15
         size:3
     }
-
-
-    GroundFace{
+Repeater{
+    model:3
+   Coin{
+       row:163+index
+       column: 8
+       size: 1
+   }
+}
+GroundFace{
         row:163
         column:7
         size:3
     }
     GroundFace{
-        row:171
+        row:176
         column: 7
         size:20
     }
+Platform{
+   row:171
+   column: 14
+   size: 5
 
-    //    Ground{
-    //        row:100
-    //    }
+}
+    Repeater{
+        model: 9
+      Finish{
+         row:189
+         column: 8+index
+         size:1
+      }
+      }
+
+    Repeater{
+          model:4
+        EnemySnowmanjump{
+
+            row:179+index*3
+            column: 8
+            size: 1
+            changeDirection: true
+    }
+}
+
 }

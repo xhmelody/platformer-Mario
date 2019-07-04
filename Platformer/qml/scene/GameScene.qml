@@ -1,38 +1,49 @@
 import Felgo 3.0
 import QtQuick 2.0
-import "entities"
-import "levels"
-
-Scene {
+import "../entities"
+import "../levels"
+import "../common"
+import "../dialog"
+BaseScene {
     id: gameScene
     // the "logical size" - the scene content is auto-scaled to match the GameWindow size
-    width: 480
-    height: 320
     gridSize: 16
 
     property int offsetBeforeScrollingStarts: 240
-    //  property int playerRow: 0
-    //  property int playerColumn: 0
 
     EntityManager {
         id: entityManager
     }
-
-    //  JsonListModel{
-
-    //  }
-    //  var json = JSON.stringify(data)
 
     // the whole screen is filled with an incredibly beautiful blue ...
     Rectangle {
         anchors.fill: gameScene.gameWindowAnchorItem
         color: "#74d6f7"
     }
-
+    // the home
+    Rectangle{
+        width:backgoundimage.width
+        height:backgoundimage.height
+        x:420
+        z:1000
+        //      gradient: Gradient {
+        //        GradientStop { position: 0.0; color: "#4595e6" }
+        //        GradientStop { position: 0.9; color: "#80bfff" }
+        //      }
+        MultiResolutionImage {
+            id:backgoundimage
+            anchors.centerIn: parent
+            source: "../../assets/background/home.png"
+        }
+        MouseArea{
+            anchors.fill:parent
+            onClicked: gameWindow.state="level"
+        }
+    }
     // ... followed by 2 parallax layers with trees and grass
     ParallaxScrollingBackground {
         id : one
-        sourceImage: "../assets/background/snowmountains.png"
+        sourceImage: "../../assets/background/snowmountains.png"
         anchors.bottom: gameScene.gameWindowAnchorItem.bottom
         anchors.horizontalCenter: gameScene.gameWindowAnchorItem.horizontalCenter
         // we move the parallax layers at the same speed as the player
@@ -41,77 +52,75 @@ Scene {
         ratio: Qt.point(0.3,0)
     }
 
-    //垂直向上的效果
-    ParallaxScrollingBackground {
-        width: 480
-        height: 320
-        anchors.fill: parent
-        //    sourceImage: "../assets/background/layer1.png"
-        anchors.bottom: one.top
-        anchors.horizontalCenter: one.horizontalCenter
-        //    anchors.bottom: gameScene.gameWindowAnchorItem.bottom
-        //    anchors.horizontalCenter: gameScene.gameWindowAnchorItem.horizontalCenter
-        movementVelocity: player.y > 160 ? Qt.point(0,player.verticalVelocity) : Qt.point(0,0)
-        ratio: Qt.point(0.3,0)
-    }
+    //  //垂直向上的效果
+    //  ParallaxScrollingBackground {
+    //      width: 480
+    //      height: 320
+    //      anchors.fill: parent
+    ////    sourceImage: "../assets/background/layer1.png"
+    //    anchors.bottom: one.top
+    //    anchors.horizontalCenter: one.horizontalCenter
+    ////    anchors.bottom: gameScene.gameWindowAnchorItem.bottom
+    ////    anchors.horizontalCenter: gameScene.gameWindowAnchorItem.horizontalCenter
+    //    movementVelocity: player.y > 160 ? Qt.point(0,player.verticalVelocity) : Qt.point(0,0)
+    //    ratio: Qt.point(0.3,0)
+    //  }
 
-    // this isThis property provides a way to forward key presses, key releases, and keyboard input coming from input methods to other items. This can be useful when you want one item to handle some keys (e.g. the up and down arrow keys), and another item to handle other keys (e.g. the left and right arrow keys). Once an item that has been forwarded keys accepts the event it is no longer forwarded to items later in the list. the moving item containing the level and player
     Item {
         id: viewPort
         height: level.height
         width: level.width
-        //    width: player.x
         anchors.bottom: gameScene.gameWindowAnchorItem.bottom
         x: player.x > offsetBeforeScrollingStarts ? offsetBeforeScrollingStarts-player.x : 0
 
         PhysicsWorld {
             id: physicsWorld
             gravity: Qt.point(0, 25)
-            debugDrawVisible: false // enable this for physics debugging
+            debugDrawVisible: false
             z: 1000
 
             onPreSolve: {
-                //this is called before the Box2DWorld handles contact events
                 var entityA = contact.fixtureA.getBody().target
                 var entityB = contact.fixtureB.getBody().target
                 if(entityB.entityType === "platform" && entityA.entityType === "player" &&
                         entityA.y + entityA.height > entityB.y) {
-                    //by setting enabled to false, they can be filtered out completely
-                    //-> disable cloud platform collisions when the player is below the platform
                     contact.enabled = false
                 }
             }
         }
 
-        // you could load your levels Dynamically with a Loader component here
         Level1 {
             id: level
-
         }
-
-
         Player {
-            property alias player: player
             id: player
             x: 20
             y: -100
+            z: 1
+
+
+            //      onFinish: {
+            //        if(gameWindow.state ==="game1")
+            //          resetLevel()
+            //        else if(gameWindow.state === "level") {
+            //          // set state to finish, to freeze the game
+            //          gameWindow.state = "finish"
+            //            gameWindow.dialog.opacity =1
+            //          // handle score
+            //          //handleScore()
+
+            //          // show finish dialog
+            //          finishialog.score = Coin.coins
+            //         // finishDialog.opacity = 1
+            ////        }
+            //     }
+            //    }
+            //    Player {
+            //      id: player
+            //      x: 20
+            //      y: -100
+            //    }
         }
-
-        //    //得到人物的坐标  并保存
-        //    function getPlayer(){
-        //        var PlayerObject = {
-        //            x:player.x,
-        //            y:player.y,
-        //            size:1
-        //        }
-
-        //        jsondata.jsonData = PlayerObject;
-        //    }
-
-        //      Component.onCompleted: {
-        //          getPlayer();
-        //      }
-
         ResetSensor {
             id : resetSensor
             width: player.width
@@ -122,15 +131,17 @@ Scene {
             onContact: {
                 player.x = 20
                 player.y = -100
-                player.isBig = false
-                //对场景进行重置
-                level.reset();
+                music.selectSound("playdiesound")
             }
+            //      Rectangle {
+            //        anchors.fill: parent
+            //        color: "yellow"
+            //        opacity: 1
+            //      }
         }
     }
 
     Rectangle {
-        // you should hide those input controls on desktops, not only because they are really ugly in this demo, but because you can move the player with the arrow keys there
         visible: !system.desktopPlatform
         enabled: visible
         anchors.right: parent.right
@@ -191,18 +202,17 @@ Scene {
     //用来处理二级跳
     //对于撞击比较矮小的平台  我们可以另行处理  在碰撞检测里面发送一个信号  让重置二级跳的事件延迟短一些
     //先不处理这里了     可以设置一些场景来掩盖这个bug
-    //  Timer{
-    //      id: clickTimer
-    //      interval: 1800;            //间隔1800对应冲量150
+    Timer{
+        id: clickTimer
+        interval: 1800          //间隔1800对应冲量150
 
-    //      onTriggered: {
-    //          controller.clickNum = 0
-    //          clickTimer.stop();
-    //      }
-    //  }
+        onTriggered: {
+            controller.clickNum = 0
+            clickTimer.stop()
+        }
+    }
 
 
-    // on desktops, you can move the player with the arrow keys, on mobiles we are using our custom inputs above to modify the controller axis values. With this approach, we only need one actual logic for the movement, always referring to the axis values of the controller
     Keys.forwardTo: controller
     TwoAxisController {
         id: controller
@@ -211,9 +221,14 @@ Scene {
             console.debug("key pressed actionName " + actionName)
             if(actionName == "up") {
                 player.jump(true)
+                //          clickNum++
+                //          if (clickNum < 3)
+                //          {
+                //              player.jump(true)
+                ////              clickTimer.start()
+                //          }
             }
         }
-
         onInputActionReleased: {
             // end jump when releasing the up button
             if (actionName == "up"){
@@ -233,12 +248,21 @@ Scene {
         //    for(var opp in opponents) {
         //      opponents[opp].reset()
         //    }
+        var enemybases=entityManager.getEntityArrayByType("bighead")
+        for(var enemy in enemybases){
+            enemybases[enemy].reset()
+        }
 
-        //    // reset coins
-        //    var coins = entityManager.getEntityArrayByType("coin")
-        //    for(var coin in coins) {
-        //      coins[coin].reset()
-        //    }
+        // reset coins
+        var coins = entityManager.getEntityArrayByType("coin")
+        for(var coin in coins) {
+            coins[coin].reset()
+        }
+        //reset snowmanjump
+        var snowmans=entityManager.getEntityArrayByType("snowmanjump")
+        for(var snowman in snowmans){
+            snowmans[snowman].reset()
+        }
 
         //    // reset mushrooms
         //    var mushrooms = entityManager.getEntityArrayByType("mushroom")
